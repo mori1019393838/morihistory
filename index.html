@@ -1,0 +1,381 @@
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모리역사연구소</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['"Nanum Myeongjo"', 'serif'],
+                        'sans': ['"Noto Sans KR"', 'sans-serif'],
+                    },
+                    colors: {
+                        'history-dark': '#2C3539',
+                        'history-light': '#F5F5DC',
+                        'history-accent': '#8B4513',
+                        'history-border': '#D2B48C',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #8B4513; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #5c2e0b; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        input[type="file"]::file-selector-button {
+            border: 1px solid #8B4513;
+            background: #fff;
+            padding: 8px 16px;
+            border-radius: 4px;
+            color: #8B4513;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 500;
+        }
+        input[type="file"]::file-selector-button:hover { background: #8B4513; color: white; }
+    </style>
+</head>
+<body class="bg-history-light text-history-dark font-sans min-h-screen flex flex-col">
+
+    <!-- 헤더 영역 -->
+    <header class="bg-white shadow-md py-5 px-4 border-t-8 border-history-accent sticky top-0 z-20">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <h1 class="text-3xl md:text-4xl font-serif font-bold text-history-dark tracking-wider cursor-pointer hover:text-history-accent transition" onclick="showSection('home')">
+                모리역사연구소
+            </h1>
+            
+            <div class="relative w-full md:w-64" id="search-container">
+                <input type="text" id="search-input" onkeyup="searchPosts()" placeholder="기록 검색..." 
+                       class="w-full pl-10 pr-4 py-2 border-2 border-gray-200 rounded-full focus:outline-none focus:border-history-accent bg-gray-50 text-sm">
+                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+
+            <nav class="flex space-x-4">
+                <button onclick="showSection('home')" class="text-history-dark font-medium hover:text-history-accent px-2 py-2">보관소</button>
+                <button onclick="showSection('write')" class="bg-history-dark text-white px-5 py-2 rounded shadow hover:bg-history-accent transition font-medium flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    기록하기
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="flex-grow max-w-6xl mx-auto w-full p-4 py-8 flex flex-col md:flex-row gap-8 relative">
+
+        <aside id="sidebar" class="md:w-64 shrink-0 fade-in">
+            <div class="bg-white p-5 rounded-lg shadow border border-history-border sticky top-28">
+                <h3 class="font-serif font-bold text-lg mb-4 border-b pb-2 text-history-accent">시대별 분류</h3>
+                <ul class="space-y-2 text-sm" id="category-list">
+                    <li><button onclick="filterCategory('전체')" class="category-btn w-full text-left px-3 py-2 rounded bg-history-accent text-white font-bold transition">전체 보기</button></li>
+                    <li><button onclick="filterCategory('고대사')" class="category-btn w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-gray-700 transition">고대사</button></li>
+                    <li><button onclick="filterCategory('중세사')" class="category-btn w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-gray-700 transition">중세사</button></li>
+                    <li><button onclick="filterCategory('근대사')" class="category-btn w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-gray-700 transition">근대사</button></li>
+                    <li><button onclick="filterCategory('현대사')" class="category-btn w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-gray-700 transition">현대사</button></li>
+                    <li><button onclick="filterCategory('미분류')" class="category-btn w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-gray-700 transition">기타/미분류</button></li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="flex-grow w-full">
+            
+            <section id="home-section" class="fade-in block">
+                <div class="flex justify-between items-end mb-6 border-b-2 border-history-border pb-2">
+                    <h2 class="text-2xl font-serif font-bold text-history-dark" id="current-view-title">전체 연구 기록</h2>
+                    <div class="text-sm text-gray-500 bg-white px-3 py-1 rounded-full shadow-sm border">총 <span id="post-count" class="font-bold text-history-accent">0</span>건</div>
+                </div>
+
+                <div id="posts-container" class="space-y-8">
+                </div>
+            </section>
+
+            <section id="write-section" class="fade-in hidden bg-white p-6 md:p-10 rounded-lg shadow-xl border border-history-border relative">
+                
+                <div id="auth-overlay" class="absolute inset-0 bg-white bg-opacity-95 z-10 flex flex-col items-center justify-center rounded-lg backdrop-blur-sm">
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-lg border text-center">
+                        <svg class="w-12 h-12 text-history-accent mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        <h3 class="text-xl font-serif font-bold mb-2">연구원 인증</h3>
+                        <p class="text-sm text-gray-500 mb-6">기록을 작성하려면 권한 암호가 필요합니다.<br>(초기 암호: 1234)</p>
+                        <input type="password" id="admin-pw" placeholder="비밀번호 입력" class="w-full px-4 py-2 border rounded text-center mb-4 focus:ring-2 focus:ring-history-accent outline-none" onkeypress="if(event.key==='Enter') checkAuth()">
+                        <div class="flex gap-2">
+                            <button onclick="showSection('home')" class="w-1/2 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">돌아가기</button>
+                            <button onclick="checkAuth()" class="w-1/2 px-4 py-2 bg-history-accent text-white rounded hover:bg-opacity-90">인증</button>
+                        </div>
+                        <p id="auth-error" class="text-red-500 text-sm mt-3 hidden">암호가 일치하지 않습니다.</p>
+                    </div>
+                </div>
+
+                <h2 class="text-2xl font-serif font-bold mb-8 text-center border-b pb-4">새 연구 기록 작성</h2>
+                
+                <form id="blog-form" onsubmit="savePost(event)" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">기록 제목</label>
+                        <input type="text" id="post-title" required placeholder="예: 1919년, 그날의 함성을 찾아서" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-history-accent font-serif text-lg bg-gray-50">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">기록 일자 (과거 설정)</label>
+                            <input type="date" id="post-date" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-history-accent bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">시대 분류</label>
+                            <select id="post-category" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-history-accent bg-gray-50">
+                                <option value="고대사">고대사</option>
+                                <option value="중세사">중세사</option>
+                                <option value="근대사">근대사</option>
+                                <option value="현대사" selected>현대사</option>
+                                <option value="미분류">기타/미분류</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded border border-dashed border-gray-300">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">사료 첨부 (사진/이미지)</label>
+                        <input type="file" id="post-image" accept="image/*" class="w-full text-sm text-gray-500" onchange="previewImage(event)">
+                        <div id="image-preview-container" class="mt-4 hidden relative inline-block">
+                            <img id="image-preview" src="" alt="미리보기" class="max-h-48 rounded border shadow-sm">
+                            <button type="button" onclick="removeImage()" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 shadow">X</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">연구 내용</label>
+                        <textarea id="post-content" required rows="12" placeholder="이곳에 연구 내용을 상세히 기록하십시오..." 
+                                  class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-history-accent resize-y leading-relaxed bg-gray-50 text-gray-800"></textarea>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200">
+                        <button type="button" onclick="showSection('home')" class="px-6 py-3 border border-gray-300 rounded text-gray-600 hover:bg-gray-100 font-medium">취소</button>
+                        <button type="submit" class="px-8 py-3 bg-history-dark text-white rounded shadow hover:bg-history-accent transition-colors font-bold text-lg flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                            기록 보존하기
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="bg-history-dark text-gray-400 py-8 text-center text-sm mt-auto border-t border-gray-800">
+        <p class="font-serif text-lg mb-2 text-history-light opacity-80">역사를 잊은 민족에게 미래는 없다.</p>
+        <!-- 연도를 2022로 고정했습니다 -->
+        <p>&copy; 2022 모리역사연구소. All Rights Reserved.</p>
+    </footer>
+
+    <!-- 자바스크립트 로직 -->
+    <script>
+        let posts = JSON.parse(localStorage.getItem('mori_history_posts_v2')) || [];
+        let currentCategory = '전체';
+        let currentSearchTerm = '';
+        let currentImageDataUrl = ''; 
+
+        document.getElementById('post-date').valueAsDate = new Date();
+
+        function showSection(sectionName) {
+            document.getElementById('home-section').classList.add('hidden');
+            document.getElementById('write-section').classList.add('hidden');
+            
+            document.getElementById('sidebar').style.display = sectionName === 'home' ? 'block' : 'none';
+            document.getElementById('search-container').style.display = sectionName === 'home' ? 'block' : 'none';
+
+            if (sectionName === 'home') {
+                document.getElementById('home-section').classList.remove('hidden');
+                currentCategory = '전체';
+                currentSearchTerm = '';
+                document.getElementById('search-input').value = '';
+                updateCategoryButtons();
+                renderPosts();
+            } else if (sectionName === 'write') {
+                document.getElementById('write-section').classList.remove('hidden');
+                document.getElementById('auth-overlay').classList.remove('hidden');
+                document.getElementById('admin-pw').value = '';
+                document.getElementById('auth-error').classList.add('hidden');
+                document.getElementById('blog-form').reset();
+                removeImage();
+                document.getElementById('post-date').valueAsDate = new Date();
+                document.getElementById('admin-pw').focus();
+            }
+        }
+
+        function checkAuth() {
+            const pw = document.getElementById('admin-pw').value;
+            if (pw === '1234') { 
+                document.getElementById('auth-overlay').classList.add('hidden');
+            } else {
+                document.getElementById('auth-error').classList.remove('hidden');
+            }
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if(file.size > 2 * 1024 * 1024) {
+                    alert('이미지 용량이 너무 큽니다. 2MB 이하의 이미지를 올려주세요.');
+                    removeImage();
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImageDataUrl = e.target.result;
+                    document.getElementById('image-preview').src = currentImageDataUrl;
+                    document.getElementById('image-preview-container').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeImage() {
+            currentImageDataUrl = '';
+            document.getElementById('post-image').value = '';
+            document.getElementById('image-preview-container').classList.add('hidden');
+            document.getElementById('image-preview').src = '';
+        }
+
+        function savePost(event) {
+            event.preventDefault();
+            const title = document.getElementById('post-title').value;
+            const date = document.getElementById('post-date').value;
+            const category = document.getElementById('post-category').value;
+            const content = document.getElementById('post-content').value;
+
+            const newPost = {
+                id: Date.now(),
+                title: title,
+                date: date,
+                category: category,
+                content: content,
+                image: currentImageDataUrl 
+            };
+
+            posts.push(newPost);
+            
+            try {
+                localStorage.setItem('mori_history_posts_v2', JSON.stringify(posts));
+                showSection('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (e) {
+                alert('저장 공간이 부족합니다. 이전 글이나 이미지를 삭제해 주세요.');
+                posts.pop(); 
+            }
+        }
+
+        function deletePost(id) {
+            if(confirm('이 기록을 영구적으로 삭제하시겠습니까? (복구 불가)')) {
+                posts = posts.filter(post => post.id !== id);
+                localStorage.setItem('mori_history_posts_v2', JSON.stringify(posts));
+                renderPosts();
+            }
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            updateCategoryButtons();
+            renderPosts();
+        }
+
+        function updateCategoryButtons() {
+            const btns = document.querySelectorAll('.category-btn');
+            btns.forEach(btn => {
+                if (btn.innerText.includes(currentCategory)) {
+                    btn.className = 'category-btn w-full text-left px-3 py-2 rounded bg-history-accent text-white font-bold transition shadow';
+                } else {
+                    btn.className = 'category-btn w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-gray-700 transition';
+                }
+            });
+            document.getElementById('current-view-title').innerText = currentCategory === '전체' ? '전체 연구 기록' : `${currentCategory} 기록`;
+        }
+
+        function searchPosts() {
+            currentSearchTerm = document.getElementById('search-input').value.toLowerCase();
+            renderPosts();
+        }
+
+        function renderPosts() {
+            const container = document.getElementById('posts-container');
+            
+            let filteredPosts = posts;
+            if (currentCategory !== '전체') {
+                filteredPosts = filteredPosts.filter(post => post.category === currentCategory);
+            }
+
+            if (currentSearchTerm) {
+                filteredPosts = filteredPosts.filter(post => 
+                    post.title.toLowerCase().includes(currentSearchTerm) || 
+                    post.content.toLowerCase().includes(currentSearchTerm)
+                );
+            }
+
+            filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            document.getElementById('post-count').textContent = filteredPosts.length;
+            container.innerHTML = ''; 
+
+            if (filteredPosts.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-gray-500 py-24 bg-white rounded-lg shadow border border-gray-100">
+                        <svg class="mx-auto h-16 w-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        <p class="text-lg">조건에 맞는 기록이 존재하지 않습니다.</p>
+                    </div>`;
+                return;
+            }
+
+            filteredPosts.forEach(post => {
+                const formattedContent = post.content.replace(/\n/g, '<br>');
+                
+                const imageHtml = post.image ? 
+                    `<div class="mb-5 mt-2 rounded border border-gray-200 overflow-hidden bg-gray-50 flex justify-center p-2">
+                        <img src="${post.image}" alt="첨부 사료" class="max-h-96 object-contain">
+                    </div>` : '';
+
+                const article = document.createElement('article');
+                article.className = 'bg-white p-6 md:p-8 rounded-lg shadow-md border border-gray-200 hover:shadow-xl transition-all duration-300 fade-in group relative';
+                
+                article.innerHTML = `
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2 border-b pb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="bg-history-dark text-white text-xs px-3 py-1 rounded-full font-medium tracking-wide shadow-sm">${post.category}</span>
+                            <span class="text-sm text-history-accent font-serif font-bold bg-history-light px-2 py-1 rounded"><i class="fa-regular fa-calendar-days mr-1"></i> ${post.date}</span>
+                        </div>
+                        <button onclick="deletePost(${post.id})" class="absolute top-4 right-4 text-gray-300 hover:text-red-500 transition p-2 rounded-full hover:bg-red-50 opacity-0 group-hover:opacity-100" title="기록 삭제">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </div>
+                    <h3 class="text-3xl font-serif font-bold text-gray-900 leading-tight mb-4 group-hover:text-history-accent transition-colors">${post.title}</h3>
+                    
+                    ${imageHtml}
+
+                    <div class="text-gray-700 leading-relaxed whitespace-pre-wrap font-sans text-lg">
+                        ${formattedContent}
+                    </div>
+                `;
+                container.appendChild(article);
+            });
+        }
+
+        renderPosts();
+    </script>
+</body>
+</html>
+
+
+```
