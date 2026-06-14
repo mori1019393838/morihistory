@@ -5,13 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>모리역사연구소</title>
-    <!-- 폰트 및 아이콘 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- 텍스트 에디터 (Quill.js) CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,16 +16,8 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        'serif': ['"Nanum Myeongjo"', 'serif'],
-                        'sans': ['"Noto Sans KR"', 'sans-serif'],
-                    },
-                    colors: {
-                        'history-dark': '#242b2e',
-                        'history-light': '#F8F5F0',
-                        'history-accent': '#8B4513',
-                        'history-border': '#E6DCC8',
-                    }
+                    fontFamily: { 'serif': ['"Nanum Myeongjo"', 'serif'], 'sans': ['"Noto Sans KR"', 'sans-serif'], },
+                    colors: { 'history-dark': '#242b2e', 'history-light': '#F8F5F0', 'history-accent': '#8B4513', 'history-border': '#E6DCC8', }
                 }
             }
         }
@@ -40,19 +29,11 @@
         ::-webkit-scrollbar-thumb:hover { background: #5c2e0b; }
         .fade-in { animation: fadeIn 0.4s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .modal-bg { background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); }
-        
-        /* Quill 에디터 커스텀 스타일 */
         .ql-toolbar.ql-snow { border: 1px solid #E6DCC8; background-color: #fff; border-radius: 8px 8px 0 0; }
         .ql-container.ql-snow { border: 1px solid #E6DCC8; border-radius: 0 0 8px 8px; background-color: #faf9f7; min-height: 300px; font-family: 'Noto Sans KR', sans-serif; font-size: 16px; }
         .ql-editor { line-height: 1.8; color: #242b2e; } 
-        
-        /* 툴바 SVG 아이콘 충돌 방지 */
-        .ql-snow .ql-stroke { stroke: #444; }
-        .ql-snow .ql-fill { fill: #444; }
-        
-        /* 게시물 본문 스타일링 */
+        .ql-snow .ql-stroke { stroke: #444; } .ql-snow .ql-fill { fill: #444; }
         .post-content-area h1, .post-content-area h2 { font-family: 'Nanum Myeongjo', serif; font-weight: bold; margin-top: 1em; margin-bottom: 0.5em; }
         .post-content-area blockquote { border-left: 4px solid #8B4513; padding-left: 1rem; color: #555; font-style: italic; background: #F8F5F0; padding: 10px; margin: 10px 0; }
         .post-content-area p { margin-bottom: 1em; }
@@ -63,21 +44,14 @@
 
     <header class="bg-white shadow-md py-5 px-4 border-t-8 border-history-accent sticky top-0 z-30">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <h1 class="text-3xl md:text-4xl font-serif font-bold text-history-dark tracking-wider cursor-pointer hover:text-history-accent transition" onclick="window.showSection('home')">
-                모리역사연구소
-            </h1>
-            
+            <h1 class="text-3xl md:text-4xl font-serif font-bold text-history-dark tracking-wider cursor-pointer hover:text-history-accent transition" onclick="window.showSection('home')">모리역사연구소</h1>
             <div class="relative w-full md:w-72" id="search-container">
-                <input type="text" id="search-input" onkeyup="window.searchPosts()" placeholder="역사 기록 검색..." 
-                       class="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-full focus:outline-none focus:border-history-accent bg-gray-50 text-sm transition-colors">
+                <input type="text" id="search-input" onkeyup="window.searchPosts()" placeholder="역사 기록 검색..." class="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-full focus:outline-none focus:border-history-accent bg-gray-50 text-sm transition-colors">
                 <i class="fa-solid fa-magnifying-glass text-gray-400 absolute left-4 top-3.5"></i>
             </div>
-
             <nav class="flex space-x-2 md:space-x-4">
                 <button onclick="window.showSection('home')" class="text-history-dark font-medium hover:text-history-accent px-3 py-2 rounded hover:bg-gray-50 transition">보관소</button>
-                <button onclick="window.showSection('write')" class="bg-history-dark text-white px-5 py-2.5 rounded shadow-lg hover:bg-history-accent transition font-medium flex items-center gap-2">
-                    <i class="fa-solid fa-pen-nib"></i> 기록하기
-                </button>
+                <button onclick="window.showSection('write')" class="bg-history-dark text-white px-5 py-2.5 rounded shadow-lg hover:bg-history-accent transition font-medium flex items-center gap-2"><i class="fa-solid fa-pen-nib"></i> 기록하기</button>
             </nav>
         </div>
     </header>
@@ -85,9 +59,7 @@
     <main class="flex-grow max-w-6xl mx-auto w-full p-4 py-8 flex flex-col md:flex-row gap-8 relative">
         <aside id="sidebar" class="md:w-64 shrink-0 fade-in">
             <div class="bg-white p-6 rounded-xl shadow-sm border border-history-border sticky top-32">
-                <h3 class="font-serif font-extrabold text-lg mb-5 border-b-2 border-history-border pb-3 text-history-accent">
-                    <i class="fa-solid fa-book-open mr-2"></i>시대별 분류
-                </h3>
+                <h3 class="font-serif font-extrabold text-lg mb-5 border-b-2 border-history-border pb-3 text-history-accent"><i class="fa-solid fa-book-open mr-2"></i>시대별 분류</h3>
                 <ul class="space-y-2 text-sm" id="category-list">
                     <li><button onclick="window.filterCategory('전체')" class="category-btn w-full text-left px-4 py-3 rounded-lg bg-history-accent text-white font-bold transition shadow">전체 보기</button></li>
                     <li><button onclick="window.filterCategory('고대사')" class="category-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700 transition">고대사</button></li>
@@ -106,43 +78,31 @@
             <section id="home-section" class="fade-in block">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 border-b-2 border-history-border pb-3 gap-4">
                     <h2 class="text-3xl font-serif font-extrabold text-history-dark tracking-wide" id="current-view-title">전체 연구 기록</h2>
-                    <div class="text-sm text-gray-500 bg-white px-4 py-1.5 rounded-full shadow-sm border border-gray-200">
-                        총 <span id="post-count" class="font-bold text-history-accent text-lg">0</span>건
-                    </div>
+                    <div class="text-sm text-gray-500 bg-white px-4 py-1.5 rounded-full shadow-sm border border-gray-200">총 <span id="post-count" class="font-bold text-history-accent text-lg">0</span>건</div>
                 </div>
                 <div id="posts-container" class="space-y-10"></div>
                 <div id="pagination-controls" class="mt-12 flex justify-center items-center space-x-2 hidden"></div>
             </section>
 
             <section id="write-section" class="fade-in hidden bg-white p-6 md:p-10 rounded-xl shadow-xl border border-history-border relative">
-                <h2 class="text-3xl font-serif font-extrabold mb-8 text-center border-b-2 border-gray-100 pb-5 text-history-dark">
-                    <i class="fa-solid fa-feather-pointed text-history-accent mr-2"></i>새 연구 기록 작성
-                </h2>
-                
+                <h2 class="text-3xl font-serif font-extrabold mb-8 text-center border-b-2 border-gray-100 pb-5 text-history-dark"><i class="fa-solid fa-feather-pointed text-history-accent mr-2"></i>새 연구 기록 작성</h2>
                 <form id="blog-form" onsubmit="window.requestSavePost(event)" class="space-y-6">
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">기록 제목</label>
                         <input type="text" id="post-title" required placeholder="예: 1919년, 그날의 함성을 찾아서" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-history-accent font-serif text-lg bg-gray-50 transition">
                     </div>
-
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <!-- 군더더기 빼고 심플하게 수정 -->
                             <label class="block text-sm font-bold text-gray-700 mb-2">일자</label>
                             <input type="date" id="post-date" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-history-accent bg-gray-50 transition">
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">시대 분류</label>
                             <select id="post-category" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-history-accent bg-gray-50 transition">
-                                <option value="고대사">고대사</option>
-                                <option value="중세사">중세사</option>
-                                <option value="근대사">근대사</option>
-                                <option value="현대사" selected>현대사</option>
-                                <option value="미분류">기타/미분류</option>
+                                <option value="고대사">고대사</option><option value="중세사">중세사</option><option value="근대사">근대사</option><option value="현대사" selected>현대사</option><option value="미분류">기타/미분류</option>
                             </select>
                         </div>
                     </div>
-
                     <div class="bg-gray-50 p-5 rounded-lg border border-dashed border-gray-300 hover:border-history-accent transition">
                         <label class="block text-sm font-bold text-gray-700 mb-2"><i class="fa-regular fa-image mr-1"></i>대표 사료(썸네일) 첨부</label>
                         <input type="file" id="post-image" accept="image/*" class="w-full text-sm text-gray-500" onchange="window.previewImage(event)">
@@ -151,29 +111,22 @@
                             <button type="button" onclick="window.removeImage()" class="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm hover:bg-red-600 shadow-lg transition transform hover:scale-110"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                     </div>
-
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2"><i class="fa-solid fa-align-left mr-1"></i>연구 내용 상세</label>
                         <div id="editor-container"></div>
                     </div>
-
                     <div class="flex justify-end space-x-3 pt-8 border-t border-gray-100">
                         <button type="button" onclick="window.showSection('home')" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100 font-medium transition">취소</button>
-                        <button type="submit" class="px-8 py-3 bg-history-dark text-white rounded-lg shadow-md hover:bg-history-accent transition-colors font-bold text-lg flex items-center gap-2 transform hover:-translate-y-0.5">
-                            <i class="fa-solid fa-vault"></i>기록 보존하기
-                        </button>
+                        <button type="submit" class="px-8 py-3 bg-history-dark text-white rounded-lg shadow-md hover:bg-history-accent transition-colors font-bold text-lg flex items-center gap-2 transform hover:-translate-y-0.5"><i class="fa-solid fa-vault"></i>기록 보존하기</button>
                     </div>
                 </form>
             </section>
         </div>
     </main>
 
-    <!-- 비밀번호 모달 -->
     <div id="password-modal" class="fixed inset-0 modal-bg z-50 flex items-center justify-center hidden">
         <div class="bg-white p-8 rounded-2xl shadow-2xl border-2 border-history-border w-11/12 max-w-sm text-center fade-in">
-            <div class="bg-history-light w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
-                <i class="fa-solid fa-lock text-2xl text-history-accent"></i>
-            </div>
+            <div class="bg-history-light w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner"><i class="fa-solid fa-lock text-2xl text-history-accent"></i></div>
             <h3 class="text-2xl font-serif font-extrabold mb-2 text-history-dark" id="modal-title">권한 인증</h3>
             <p class="text-sm text-gray-500 mb-6" id="modal-desc">조작 권한 암호를 입력하세요.</p>
             <input type="password" id="modal-pw" placeholder="비밀번호 10자리" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-center mb-5 focus:ring-2 focus:ring-history-accent outline-none bg-gray-50 text-lg tracking-widest" onkeypress="if(event.key==='Enter') window.confirmPassword()">
@@ -193,391 +146,119 @@
         </div>
     </footer>
 
-    <!-- Quill.js 라이브러리 -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-    <!-- Firebase SDK (사용자 키 적용됨) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, doc, setDoc, deleteDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // 글씨 색상 인라인 스타일 강제 설정
         var ColorStyle = Quill.import('attributors/style/color');
         var BackgroundStyle = Quill.import('attributors/style/background');
-        Quill.register(ColorStyle, true);
-        Quill.register(BackgroundStyle, true);
+        Quill.register(ColorStyle, true); Quill.register(BackgroundStyle, true);
 
-        window.posts = [];
-        window.currentCategory = '전체';
-        window.currentSearchTerm = '';
-        window.currentImageDataUrl = '';
-        window.dbRef = null;
-        window.isFirebaseReady = false;
-        
+        window.posts = []; window.currentCategory = '전체'; window.currentSearchTerm = ''; window.currentImageDataUrl = ''; window.dbRef = null; window.isFirebaseReady = false; window.currentPage = 1; window.currentAction = null; window.pendingEvent = null; window.pendingActionData = null;
         const POSTS_PER_PAGE = 5;
-        window.currentPage = 1;
-        window.currentAction = null;
-        window.pendingEvent = null;
-        window.pendingActionData = null;
 
-        var quill = new Quill('#editor-container', {
-            theme: 'snow',
-            placeholder: '이곳에 연구 내용을 상세히 기록하십시오...',
-            modules: {
-                toolbar: [
-                    [{ 'header': [1, 2, false] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'color': [] }, { 'background': [] }],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['blockquote', 'link'],
-                    ['clean']
-                ]
-            }
-        });
-
+        var quill = new Quill('#editor-container', { theme: 'snow', placeholder: '이곳에 연구 내용을 상세히 기록하십시오...', modules: { toolbar: [ [{ 'header': [1, 2, false] }], ['bold', 'italic', 'underline', 'strike'], [{ 'color': [] }, { 'background': [] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['blockquote', 'link'], ['clean'] ] } });
         document.getElementById('post-date').valueAsDate = new Date();
 
         try {
-            // ★ 보내주신 파이어베이스 정보 적용 완료 ★
-            const firebaseConfig = {
-                apiKey: "AIzaSyDLfbCS-MJXNNtrFjtmn_giVckuq9YTEno",
-                authDomain: "mori-history.firebaseapp.com",
-                projectId: "mori-history",
-                storageBucket: "mori-history.firebasestorage.app",
-                messagingSenderId: "582598628309",
-                appId: "1:582598628309:web:b5e8bfdecd0eae5ae5e35c"
-            };
-            
-            const app = initializeApp(firebaseConfig);
-            const db = getFirestore(app);
-            
-            // 데이터베이스 창고 이름
-            window.dbRef = collection(db, 'mori_posts');
-            window.isFirebaseReady = true;
-
+            const firebaseConfig = { apiKey: "AIzaSyDLfbCS-MJXNNtrFjtmn_giVckuq9YTEno", authDomain: "mori-history.firebaseapp.com", projectId: "mori-history", storageBucket: "mori-history.firebasestorage.app", messagingSenderId: "582598628309", appId: "1:582598628309:web:b5e8bfdecd0eae5ae5e35c" };
+            const app = initializeApp(firebaseConfig); const db = getFirestore(app); window.dbRef = collection(db, 'mori_posts'); window.isFirebaseReady = true;
             document.getElementById('cloud-status').className = "mt-8 text-xs text-center px-3 py-3 rounded-lg bg-green-100 text-green-800 font-bold border border-green-300 flex items-center justify-center gap-2 shadow-inner";
             document.getElementById('cloud-status').innerHTML = '<i class="fa-solid fa-cloud-check text-lg"></i> 클라우드 동기화 켜짐';
-
-            onSnapshot(window.dbRef, (snapshot) => {
-                window.posts = [];
-                snapshot.forEach((doc) => { window.posts.push(doc.data()); });
-                window.renderPosts();
-            }, (error) => { 
-                console.error("데이터 불러오기 에러:", error); 
-                if(error.message.includes("permission")) {
-                    document.getElementById('cloud-status').className = "mt-8 text-xs text-center px-3 py-3 rounded-lg bg-red-100 text-red-800 font-bold border border-red-300 flex items-center justify-center gap-2 shadow-inner";
-                    document.getElementById('cloud-status').innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> 데이터베이스 생성 필요';
-                }
-            });
-
-        } catch (e) { console.error("서버 연결 실패", e); }
+            onSnapshot(window.dbRef, (snapshot) => { window.posts = []; snapshot.forEach((doc) => { window.posts.push(doc.data()); }); window.renderPosts(); }, (error) => { console.error(error); });
+        } catch (e) { console.error(e); }
 
         window.showSection = function(sectionName) {
-            document.getElementById('home-section').classList.add('hidden');
-            document.getElementById('write-section').classList.add('hidden');
-            document.getElementById('sidebar').style.display = sectionName === 'home' ? 'block' : 'none';
-            document.getElementById('search-container').style.display = sectionName === 'home' ? 'block' : 'none';
-
-            if (sectionName === 'home') {
-                document.getElementById('home-section').classList.remove('hidden');
-                window.currentCategory = '전체';
-                window.currentSearchTerm = '';
-                document.getElementById('search-input').value = '';
-                window.currentPage = 1; 
-                window.updateCategoryButtons();
-                window.renderPosts();
-            } else if (sectionName === 'write') {
-                document.getElementById('write-section').classList.remove('hidden');
-                document.getElementById('blog-form').reset();
-                quill.setContents([]); 
-                window.removeImage();
-                document.getElementById('post-date').valueAsDate = new Date();
-            }
+            document.getElementById('home-section').classList.add('hidden'); document.getElementById('write-section').classList.add('hidden');
+            document.getElementById('sidebar').style.display = sectionName === 'home' ? 'block' : 'none'; document.getElementById('search-container').style.display = sectionName === 'home' ? 'block' : 'none';
+            if (sectionName === 'home') { document.getElementById('home-section').classList.remove('hidden'); window.currentCategory = '전체'; window.currentSearchTerm = ''; document.getElementById('search-input').value = ''; window.currentPage = 1; window.updateCategoryButtons(); window.renderPosts(); } 
+            else if (sectionName === 'write') { document.getElementById('write-section').classList.remove('hidden'); document.getElementById('blog-form').reset(); quill.setContents([]); window.removeImage(); document.getElementById('post-date').valueAsDate = new Date(); }
         }
 
         window.openModal = function(actionType, eventOrId, extraData = null) {
-            window.currentAction = actionType;
-            window.pendingEvent = eventOrId;
-            window.pendingActionData = extraData;
-            
-            if (actionType === 'save') {
-                document.getElementById('modal-title').innerText = "기록 보존 인증";
-                document.getElementById('modal-desc').innerText = "새로운 기록을 클라우드에 보존하려면 암호를 입력하세요.";
-            } else if (actionType === 'delete') {
-                document.getElementById('modal-title').innerText = "기록 삭제 인증";
-                document.getElementById('modal-desc').innerText = "기록을 영구 삭제하려면 암호를 입력하세요.";
-            } else if (actionType === 'deleteComment') {
-                document.getElementById('modal-title').innerText = "댓글 삭제 인증";
-                document.getElementById('modal-desc').innerText = "관리자 권한으로 댓글을 삭제합니다.";
-            }
-            
-            document.getElementById('modal-pw').value = '';
-            document.getElementById('modal-error').classList.add('hidden');
-            document.getElementById('password-modal').classList.remove('hidden');
-            setTimeout(() => document.getElementById('modal-pw').focus(), 100);
+            window.currentAction = actionType; window.pendingEvent = eventOrId; window.pendingActionData = extraData;
+            if (actionType === 'save') { document.getElementById('modal-title').innerText = "기록 보존 인증"; document.getElementById('modal-desc').innerText = "새로운 기록을 클라우드에 보존하려면 암호를 입력하세요."; } 
+            else if (actionType === 'delete') { document.getElementById('modal-title').innerText = "기록 삭제 인증"; document.getElementById('modal-desc').innerText = "기록을 영구 삭제하려면 암호를 입력하세요."; } 
+            else if (actionType === 'deleteComment') { document.getElementById('modal-title').innerText = "댓글 삭제 인증"; document.getElementById('modal-desc').innerText = "관리자 권한으로 댓글을 삭제합니다."; }
+            document.getElementById('modal-pw').value = ''; document.getElementById('modal-error').classList.add('hidden'); document.getElementById('password-modal').classList.remove('hidden'); setTimeout(() => document.getElementById('modal-pw').focus(), 100);
         }
 
-        window.closeModal = function() {
-            document.getElementById('password-modal').classList.add('hidden');
-            window.currentAction = null;
-            window.pendingEvent = null;
-            window.pendingActionData = null;
-        }
+        window.closeModal = function() { document.getElementById('password-modal').classList.add('hidden'); window.currentAction = null; window.pendingEvent = null; window.pendingActionData = null; }
 
         window.confirmPassword = function() {
             const pw = document.getElementById('modal-pw').value;
             if (pw === '1019393838') { 
                 window.closeModal();
-                if (window.currentAction === 'save') window.executeSavePost();
-                else if (window.currentAction === 'delete') window.executeDeletePost(window.pendingEvent);
-                else if (window.currentAction === 'deleteComment') window.executeDeleteComment(window.pendingEvent, window.pendingActionData);
-            } else {
-                document.getElementById('modal-error').classList.remove('hidden');
-            }
+                if (window.currentAction === 'save') window.executeSavePost(); else if (window.currentAction === 'delete') window.executeDeletePost(window.pendingEvent); else if (window.currentAction === 'deleteComment') window.executeDeleteComment(window.pendingEvent, window.pendingActionData);
+            } else { document.getElementById('modal-error').classList.remove('hidden'); }
         }
 
-        window.requestSavePost = function(event) {
-            event.preventDefault(); 
-            if(quill.getText().trim().length === 0) {
-                alert("연구 내용을 입력해주세요.");
-                return;
-            }
-            window.openModal('save', event);
-        }
+        window.requestSavePost = function(event) { event.preventDefault(); if(quill.getText().trim().length === 0) { alert("연구 내용을 입력해주세요."); return; } window.openModal('save', event); }
 
         window.executeSavePost = async function() {
             if (!window.isFirebaseReady) return alert("클라우드 서버 연결이 필요합니다.");
-            
-            const title = document.getElementById('post-title').value;
-            const date = document.getElementById('post-date').value;
-            const category = document.getElementById('post-category').value;
-            const contentHTML = quill.root.innerHTML; 
-            const id = Date.now().toString();
-
+            const title = document.getElementById('post-title').value; const date = document.getElementById('post-date').value; const category = document.getElementById('post-category').value; const contentHTML = quill.root.innerHTML; const id = Date.now().toString();
             const newPost = { id, title, date, category, content: contentHTML, image: window.currentImageDataUrl, views: 0, comments: [] };
-
-            try {
-                await setDoc(doc(window.dbRef, id), newPost);
-                window.showSection('home');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } catch (e) { alert('저장 에러 발생'); console.error(e); }
+            try { await setDoc(doc(window.dbRef, id), newPost); window.showSection('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { alert('저장 에러 발생'); console.error(e); }
         }
 
-        window.executeDeletePost = async function(id) {
-            if (!window.isFirebaseReady) return;
-            try { await deleteDoc(doc(window.dbRef, id.toString())); } catch(e) { console.error("삭제 에러", e); }
-        }
-
-        window.incrementViews = async function(id) {
-            if (!window.isFirebaseReady) return;
-            const post = window.posts.find(p => p.id === id.toString());
-            if(post) {
-                try { await updateDoc(doc(window.dbRef, id.toString()), { views: (post.views || 0) + 1 }); } 
-                catch(e) { console.error("조회수 업데이트 에러", e); }
-            }
-        }
-
+        window.executeDeletePost = async function(id) { if (!window.isFirebaseReady) return; try { await deleteDoc(doc(window.dbRef, id.toString())); } catch(e) { console.error(e); } }
+        window.incrementViews = async function(id) { if (!window.isFirebaseReady) return; const post = window.posts.find(p => p.id === id.toString()); if(post) { try { await updateDoc(doc(window.dbRef, id.toString()), { views: (post.views || 0) + 1 }); } catch(e) { console.error(e); } } }
+        
         window.addComment = async function(postId) {
-            if (!window.isFirebaseReady) return alert("서버 연결이 필요합니다.");
-            const inputEl = document.getElementById(`comment-input-${postId}`);
-            const text = inputEl.value.trim();
-            if(!text) return;
-
+            if (!window.isFirebaseReady) return alert("서버 연결이 필요합니다."); const inputEl = document.getElementById(`comment-input-${postId}`); const text = inputEl.value.trim(); if(!text) return;
             const post = window.posts.find(p => p.id === postId.toString());
-            if(post) {
-                const newComment = { id: Date.now().toString(), text: text, date: new Date().toLocaleDateString() };
-                const updatedComments = post.comments ? [...post.comments, newComment] : [newComment];
-                try {
-                    await updateDoc(doc(window.dbRef, postId.toString()), { comments: updatedComments });
-                    inputEl.value = ''; 
-                } catch(e) { console.error("댓글 추가 에러", e); }
-            }
+            if(post) { const newComment = { id: Date.now().toString(), text: text, date: new Date().toLocaleDateString() }; const updatedComments = post.comments ? [...post.comments, newComment] : [newComment]; try { await updateDoc(doc(window.dbRef, postId.toString()), { comments: updatedComments }); inputEl.value = ''; } catch(e) { console.error(e); } }
         }
-
         window.requestDeleteComment = function(postId, commentId) { window.openModal('deleteComment', postId, commentId); }
-
-        window.executeDeleteComment = async function(postId, commentId) {
-            if (!window.isFirebaseReady) return;
-            const post = window.posts.find(p => p.id === postId.toString());
-            if(post && post.comments) {
-                const updatedComments = post.comments.filter(c => c.id !== commentId);
-                try { await updateDoc(doc(window.dbRef, postId.toString()), { comments: updatedComments }); } 
-                catch(e) { console.error("댓글 삭제 에러", e); }
-            }
-        }
-
-        window.sharePost = function(title, postId) {
-            const dummyUrl = window.location.href.split('?')[0] + `?post=${postId}`;
-            if (navigator.share) {
-                navigator.share({ title: `모리역사연구소: ${title}`, text: '흥미로운 역사 기록을 확인해보세요.', url: dummyUrl }).catch(console.error);
-            } else {
-                const el = document.createElement('textarea');
-                el.value = dummyUrl; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
-                alert("게시글 링크가 클립보드에 복사되었습니다.");
-            }
-        }
+        window.executeDeleteComment = async function(postId, commentId) { if (!window.isFirebaseReady) return; const post = window.posts.find(p => p.id === postId.toString()); if(post && post.comments) { const updatedComments = post.comments.filter(c => c.id !== commentId); try { await updateDoc(doc(window.dbRef, postId.toString()), { comments: updatedComments }); } catch(e) { console.error(e); } } }
+        
+        window.sharePost = function(title, postId) { const dummyUrl = window.location.href.split('?')[0] + `?post=${postId}`; if (navigator.share) { navigator.share({ title: `모리역사연구소: ${title}`, text: '흥미로운 역사 기록을 확인해보세요.', url: dummyUrl }).catch(console.error); } else { const el = document.createElement('textarea'); el.value = dummyUrl; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); alert("게시글 링크가 클립보드에 복사되었습니다."); } }
 
         window.previewImage = function(event) {
             const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width; let height = img.height;
-                        if (width > 800 || height > 800) {
-                            if (width > height) { height = Math.round((height *= 800 / width)); width = 800; }
-                            else { width = Math.round((width *= 800 / height)); height = 800; }
-                        }
-                        canvas.width = width; canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        window.currentImageDataUrl = canvas.toDataURL('image/jpeg', 0.6); 
-                        document.getElementById('image-preview').src = window.currentImageDataUrl;
-                        document.getElementById('image-preview-container').classList.remove('hidden');
-                    }
-                    img.src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
+            if (file) { const reader = new FileReader(); reader.onload = function(e) { const img = new Image(); img.onload = function() { const canvas = document.createElement('canvas'); let width = img.width; let height = img.height; if (width > 800 || height > 800) { if (width > height) { height = Math.round((height *= 800 / width)); width = 800; } else { width = Math.round((width *= 800 / height)); height = 800; } } canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height); window.currentImageDataUrl = canvas.toDataURL('image/jpeg', 0.6); document.getElementById('image-preview').src = window.currentImageDataUrl; document.getElementById('image-preview-container').classList.remove('hidden'); }; img.src = e.target.result; }; reader.readAsDataURL(file); }
         }
-        window.removeImage = function() {
-            window.currentImageDataUrl = '';
-            document.getElementById('post-image').value = '';
-            document.getElementById('image-preview-container').classList.add('hidden');
-            document.getElementById('image-preview').src = '';
-        }
+        window.removeImage = function() { window.currentImageDataUrl = ''; document.getElementById('post-image').value = ''; document.getElementById('image-preview-container').classList.add('hidden'); document.getElementById('image-preview').src = ''; }
 
         window.filterCategory = function(category) { window.currentCategory = category; window.currentPage = 1; window.updateCategoryButtons(); window.renderPosts(); }
-        window.updateCategoryButtons = function() {
-            const btns = document.querySelectorAll('.category-btn');
-            btns.forEach(btn => {
-                if (btn.innerText.includes(window.currentCategory)) {
-                    btn.className = 'category-btn w-full text-left px-4 py-3 rounded-lg bg-history-accent text-white font-bold transition shadow';
-                } else {
-                    btn.className = 'category-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700 transition';
-                }
-            });
-            document.getElementById('current-view-title').innerText = window.currentCategory === '전체' ? '전체 연구 기록' : `${window.currentCategory} 기록`;
-        }
+        window.updateCategoryButtons = function() { const btns = document.querySelectorAll('.category-btn'); btns.forEach(btn => { if (btn.innerText.includes(window.currentCategory)) { btn.className = 'category-btn w-full text-left px-4 py-3 rounded-lg bg-history-accent text-white font-bold transition shadow'; } else { btn.className = 'category-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700 transition'; } }); document.getElementById('current-view-title').innerText = window.currentCategory === '전체' ? '전체 연구 기록' : `${window.currentCategory} 기록`; }
         window.searchPosts = function() { window.currentSearchTerm = document.getElementById('search-input').value.toLowerCase(); window.currentPage = 1; window.renderPosts(); }
-
-        window.togglePostContent = function(id) {
-            const contentDiv = document.getElementById(`post-body-${id}`);
-            const iconDiv = document.getElementById(`toggle-icon-${id}`);
-            
-            if(contentDiv.classList.contains('hidden')) {
-                contentDiv.classList.remove('hidden');
-                iconDiv.style.transform = 'rotate(180deg)';
-                window.incrementViews(id); 
-            } else {
-                contentDiv.classList.add('hidden');
-                iconDiv.style.transform = 'rotate(0deg)';
-            }
-        }
-
+        window.togglePostContent = function(id) { const contentDiv = document.getElementById(`post-body-${id}`); const iconDiv = document.getElementById(`toggle-icon-${id}`); if(contentDiv.classList.contains('hidden')) { contentDiv.classList.remove('hidden'); iconDiv.style.transform = 'rotate(180deg)'; window.incrementViews(id); } else { contentDiv.classList.add('hidden'); iconDiv.style.transform = 'rotate(0deg)'; } }
         window.goToPage = function(page) { window.currentPage = page; window.renderPosts(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
         window.renderPosts = function() {
-            const container = document.getElementById('posts-container');
-            const paginationContainer = document.getElementById('pagination-controls');
-            
+            const container = document.getElementById('posts-container'); const paginationContainer = document.getElementById('pagination-controls');
             let filteredPosts = window.posts;
             if (window.currentCategory !== '전체') { filteredPosts = filteredPosts.filter(post => post.category === window.currentCategory); }
-            if (window.currentSearchTerm) {
-                filteredPosts = filteredPosts.filter(post => 
-                    post.title.toLowerCase().includes(window.currentSearchTerm) || 
-                    post.content.replace(/<[^>]*>?/gm, '').toLowerCase().includes(window.currentSearchTerm)
-                );
-            }
-
-            filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-            document.getElementById('post-count').textContent = filteredPosts.length;
-            container.innerHTML = ''; 
-
-            if (filteredPosts.length === 0) {
-                paginationContainer.classList.add('hidden');
-                container.innerHTML = `
-                    <div class="text-center text-gray-500 py-24 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
-                        <div class="bg-gray-50 p-6 rounded-full mb-4"><i class="fa-solid fa-scroll text-4xl text-gray-300"></i></div>
-                        <p class="text-xl font-serif">조건에 맞는 기록이 존재하지 않습니다.</p>
-                    </div>`;
-                return;
-            }
-
-            const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
-            if(window.currentPage > totalPages) window.currentPage = totalPages;
-            
-            const startIndex = (window.currentPage - 1) * POSTS_PER_PAGE;
-            const endIndex = startIndex + POSTS_PER_PAGE;
-            const currentPosts = filteredPosts.slice(startIndex, endIndex);
+            if (window.currentSearchTerm) { filteredPosts = filteredPosts.filter(post => post.title.toLowerCase().includes(window.currentSearchTerm) || post.content.replace(/<[^>]*>?/gm, '').toLowerCase().includes(window.currentSearchTerm)); }
+            filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date)); document.getElementById('post-count').textContent = filteredPosts.length; container.innerHTML = ''; 
+            if (filteredPosts.length === 0) { paginationContainer.classList.add('hidden'); container.innerHTML = `<div class="text-center text-gray-500 py-24 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col items-center"><div class="bg-gray-50 p-6 rounded-full mb-4"><i class="fa-solid fa-scroll text-4xl text-gray-300"></i></div><p class="text-xl font-serif">조건에 맞는 기록이 존재하지 않습니다.</p></div>`; return; }
+            const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE); if(window.currentPage > totalPages) window.currentPage = totalPages;
+            const startIndex = (window.currentPage - 1) * POSTS_PER_PAGE; const endIndex = startIndex + POSTS_PER_PAGE; const currentPosts = filteredPosts.slice(startIndex, endIndex);
 
             currentPosts.forEach(post => {
-                const views = post.views || 0;
-                const comments = post.comments || [];
-                const imageHtml = post.image ? `<div class="mb-6 rounded-xl border border-gray-200 overflow-hidden bg-gray-50 flex justify-center shadow-inner"><img src="${post.image}" alt="첨부 사료" class="max-h-96 object-contain w-full"></div>` : '';
-
-                let commentsHtml = '';
-                comments.forEach(c => {
-                    commentsHtml += `
-                        <div class="bg-white p-3 rounded border border-gray-100 text-sm mb-2 flex justify-between items-start group">
-                            <div><span class="font-bold text-gray-700 mr-2"><i class="fa-solid fa-user-pen text-xs text-gray-400"></i> 방문자</span><span class="text-xs text-gray-400">${c.date}</span><p class="mt-1 text-gray-800">${c.text}</p></div>
-                            <button onclick="window.requestDeleteComment('${post.id}', '${c.id}')" class="text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-xmark"></i></button>
-                        </div>`;
-                });
-
-                const article = document.createElement('article');
-                article.className = 'bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden group relative';
-                
+                const views = post.views || 0; const comments = post.comments || []; const imageHtml = post.image ? `<div class="mb-6 rounded-xl border border-gray-200 overflow-hidden bg-gray-50 flex justify-center shadow-inner"><img src="${post.image}" alt="첨부 사료" class="max-h-96 object-contain w-full"></div>` : '';
+                let commentsHtml = ''; comments.forEach(c => { commentsHtml += `<div class="bg-white p-3 rounded border border-gray-100 text-sm mb-2 flex justify-between items-start group"><div><span class="font-bold text-gray-700 mr-2"><i class="fa-solid fa-user-pen text-xs text-gray-400"></i> 방문자</span><span class="text-xs text-gray-400">${c.date}</span><p class="mt-1 text-gray-800">${c.text}</p></div><button onclick="window.requestDeleteComment('${post.id}', '${c.id}')" class="text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-xmark"></i></button></div>`; });
+                const article = document.createElement('article'); article.className = 'bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden group relative';
                 article.innerHTML = `
                     <div class="p-6 md:p-8 cursor-pointer" onclick="window.togglePostContent('${post.id}')">
                         <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
-                            <div class="flex items-center gap-3">
-                                <span class="bg-history-dark text-white text-xs px-3 py-1.5 rounded-md font-bold tracking-widest shadow-sm">${post.category}</span>
-                                <span class="text-sm text-history-accent font-serif font-bold bg-history-light px-2 py-1 rounded border border-history-border"><i class="fa-regular fa-calendar-days mr-1"></i> ${post.date}</span>
-                            </div>
-                            <div class="flex items-center gap-4 text-sm text-gray-500 font-medium">
-                                <span title="조회수"><i class="fa-solid fa-eye mr-1"></i> ${views}</span>
-                                <span title="댓글수"><i class="fa-solid fa-comment-dots mr-1"></i> ${comments.length}</span>
-                                <button onclick="event.stopPropagation(); window.requestDeletePost('${post.id}')" class="text-gray-300 hover:text-red-500 transition p-2 rounded-full hover:bg-red-50" title="기록 영구 삭제"><i class="fa-solid fa-trash-can"></i></button>
-                            </div>
+                            <div class="flex items-center gap-3"><span class="bg-history-dark text-white text-xs px-3 py-1.5 rounded-md font-bold tracking-widest shadow-sm">${post.category}</span><span class="text-sm text-history-accent font-serif font-bold bg-history-light px-2 py-1 rounded border border-history-border"><i class="fa-regular fa-calendar-days mr-1"></i> ${post.date}</span></div>
+                            <div class="flex items-center gap-4 text-sm text-gray-500 font-medium"><span title="조회수"><i class="fa-solid fa-eye mr-1"></i> ${views}</span><span title="댓글수"><i class="fa-solid fa-comment-dots mr-1"></i> ${comments.length}</span><button onclick="event.stopPropagation(); window.requestDeletePost('${post.id}')" class="text-gray-300 hover:text-red-500 transition p-2 rounded-full hover:bg-red-50" title="기록 영구 삭제"><i class="fa-solid fa-trash-can"></i></button></div>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-2xl md:text-3xl font-serif font-extrabold text-gray-900 leading-tight group-hover:text-history-accent transition-colors">${post.title}</h3>
-                            <div id="toggle-icon-${post.id}" class="text-gray-400 transition-transform duration-300 ml-4"><i class="fa-solid fa-chevron-down text-xl"></i></div>
-                        </div>
+                        <div class="flex justify-between items-center"><h3 class="text-2xl md:text-3xl font-serif font-extrabold text-gray-900 leading-tight group-hover:text-history-accent transition-colors">${post.title}</h3><div id="toggle-icon-${post.id}" class="text-gray-400 transition-transform duration-300 ml-4"><i class="fa-solid fa-chevron-down text-xl"></i></div></div>
                     </div>
-                    
                     <div id="post-body-${post.id}" class="hidden border-t border-gray-100 bg-white">
-                        <div class="p-6 md:p-8">
-                            ${imageHtml}
-                            <div class="post-content-area text-gray-800 text-lg">${post.content}</div>
-                            <div class="mt-8 flex justify-end">
-                                <button onclick="window.sharePost('${post.title.replace(/'/g, "\\'")}', '${post.id}')" class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition font-medium flex items-center gap-2"><i class="fa-solid fa-share-nodes"></i> 공유하기</button>
-                            </div>
-                        </div>
-                        <div class="bg-gray-50 p-6 md:p-8 border-t border-gray-200">
-                            <h4 class="font-bold text-gray-700 mb-4"><i class="fa-regular fa-comments mr-1"></i> 열람자 의견 (${comments.length})</h4>
-                            <div class="mb-4">${commentsHtml || '<p class="text-sm text-gray-400 italic">아직 남겨진 의견이 없습니다.</p>'}</div>
-                            <div class="flex gap-2 mt-4">
-                                <input type="text" id="comment-input-${post.id}" placeholder="역사 기록에 대한 의견을 남겨주세요..." class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-history-accent text-sm" onkeypress="if(event.key==='Enter') window.addComment('${post.id}')">
-                                <button onclick="window.addComment('${post.id}')" class="bg-history-accent text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-opacity-90 transition whitespace-nowrap">등록</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                        <div class="p-6 md:p-8">${imageHtml}<div class="post-content-area text-gray-800 text-lg">${post.content}</div><div class="mt-8 flex justify-end"><button onclick="window.sharePost('${post.title.replace(/'/g, "\\'")}', '${post.id}')" class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition font-medium flex items-center gap-2"><i class="fa-solid fa-share-nodes"></i> 공유하기</button></div></div>
+                        <div class="bg-gray-50 p-6 md:p-8 border-t border-gray-200"><h4 class="font-bold text-gray-700 mb-4"><i class="fa-regular fa-comments mr-1"></i> 열람자 의견 (${comments.length})</h4><div class="mb-4">${commentsHtml || '<p class="text-sm text-gray-400 italic">아직 남겨진 의견이 없습니다.</p>'}</div><div class="flex gap-2 mt-4"><input type="text" id="comment-input-${post.id}" placeholder="역사 기록에 대한 의견을 남겨주세요..." class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-history-accent text-sm" onkeypress="if(event.key==='Enter') window.addComment('${post.id}')"><button onclick="window.addComment('${post.id}')" class="bg-history-accent text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-opacity-90 transition whitespace-nowrap">등록</button></div></div>
+                    </div>`;
                 container.appendChild(article);
             });
-
             if(totalPages > 1) {
-                paginationContainer.classList.remove('hidden');
-                let pagesHtml = '';
-                pagesHtml += `<button onclick="window.goToPage(${window.currentPage - 1})" class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" ${window.currentPage === 1 ? 'disabled' : ''}><i class="fa-solid fa-chevron-left"></i></button>`;
-                for(let i=1; i<=totalPages; i++) {
-                    if(i === window.currentPage) pagesHtml += `<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-history-accent text-white font-bold shadow">${i}</button>`;
-                    else pagesHtml += `<button onclick="window.goToPage(${i})" class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 font-medium transition">${i}</button>`;
-                }
+                paginationContainer.classList.remove('hidden'); let pagesHtml = `<button onclick="window.goToPage(${window.currentPage - 1})" class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" ${window.currentPage === 1 ? 'disabled' : ''}><i class="fa-solid fa-chevron-left"></i></button>`;
+                for(let i=1; i<=totalPages; i++) { if(i === window.currentPage) pagesHtml += `<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-history-accent text-white font-bold shadow">${i}</button>`; else pagesHtml += `<button onclick="window.goToPage(${i})" class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 font-medium transition">${i}</button>`; }
                 pagesHtml += `<button onclick="window.goToPage(${window.currentPage + 1})" class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" ${window.currentPage === totalPages ? 'disabled' : ''}><i class="fa-solid fa-chevron-right"></i></button>`;
                 paginationContainer.innerHTML = pagesHtml;
             } else { paginationContainer.classList.add('hidden'); }
