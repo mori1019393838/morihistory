@@ -6,211 +6,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>모리역사연구소</title>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 가장 안정적인 파이어베이스 구버전 -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <style>
         body { font-family: 'Noto Sans KR', sans-serif; background-color: #F8F5F0; }
-        h1, h2, h3 { font-family: 'Nanum Myeongjo', serif; }
-        /* 스크롤바 디자인 */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-thumb { background: #8B4513; border-radius: 4px; }
+        .ql-container { min-height: 300px; font-size: 16px; }
+        .modal-bg { background-color: rgba(0, 0, 0, 0.6); }
     </style>
 </head>
-<body class="text-[#242b2e] min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col">
 
-    <!-- 상단 헤더 -->
-    <header class="bg-white shadow-md py-5 px-4 border-t-8 border-[#8B4513]">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <h1 class="text-3xl font-bold cursor-pointer text-[#242b2e]" onclick="showHome()">모리역사연구소</h1>
-            <button onclick="showWrite()" class="bg-[#242b2e] text-white px-5 py-2.5 rounded hover:bg-[#8B4513] transition font-bold shadow-md">
-                기록하기
-            </button>
+    <header class="bg-white shadow-md py-5 px-4 border-t-8 border-[#8B4513] sticky top-0 z-30">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-serif font-bold cursor-pointer" onclick="showHome()">모리역사연구소</h1>
+            <button onclick="showWrite()" class="bg-[#242b2e] text-white px-5 py-2.5 rounded shadow hover:bg-[#8B4513] transition font-bold">기록하기</button>
         </div>
     </header>
 
-    <main class="flex-grow max-w-4xl mx-auto w-full p-4 py-8">
-        
-        <!-- 1. 메인 보관소 화면 -->
-        <div id="home-section" style="display: block;">
-            <h2 class="text-2xl font-extrabold mb-6 border-b-2 border-[#E6DCC8] pb-3">전체 연구 기록</h2>
-            <!-- 여기에 글이 뜹니다 -->
-            <div id="posts-container" class="space-y-6">
-                <p class="text-center text-gray-500 py-10 font-bold">데이터를 불러오는 중입니다...</p>
-            </div>
+    <main class="flex-grow max-w-6xl mx-auto w-full p-4 py-8">
+        <div id="home-section">
+            <h2 class="text-3xl font-serif font-extrabold mb-8 border-b-2 border-[#E6DCC8] pb-3" id="view-title">전체 연구 기록</h2>
+            <div id="posts-container" class="space-y-6"></div>
         </div>
 
-        <!-- 2. 글쓰기 화면 (에러 유발하는 Form, 모달창, 에디터 전부 제거) -->
-        <div id="write-section" style="display: none;" class="bg-white p-6 md:p-8 rounded-xl shadow border border-[#E6DCC8]">
-            <h2 class="text-2xl font-extrabold mb-6 text-center border-b-2 border-gray-100 pb-4">새 연구 기록 작성</h2>
-            
-            <div class="space-y-5">
-                <div>
-                    <label class="block font-bold mb-2">기록 제목</label>
-                    <input type="text" id="post-title" placeholder="제목을 입력하세요" class="w-full px-4 py-3 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:border-[#8B4513]">
-                </div>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block font-bold mb-2">일자</label>
-                        <input type="date" id="post-date" class="w-full px-4 py-3 border border-gray-300 rounded bg-gray-50">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-2">시대 분류</label>
-                        <select id="post-category" class="w-full px-4 py-3 border border-gray-300 rounded bg-gray-50">
-                            <option value="고대사">고대사</option>
-                            <option value="중세사">중세사</option>
-                            <option value="근대사">근대사</option>
-                            <option value="현대사" selected>현대사</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block font-bold mb-2">연구 내용 (텍스트 전용)</label>
-                    <textarea id="post-content" placeholder="이곳에 내용을 기록하세요..." class="w-full px-4 py-3 border border-gray-300 rounded bg-gray-50 h-64 focus:outline-none focus:border-[#8B4513]"></textarea>
-                </div>
-
-                <!-- 팝업창 렉 걸릴까봐 아예 밑으로 빼버린 암호 입력칸 -->
-                <div class="bg-gray-100 p-4 rounded-lg mt-8 border border-gray-200">
-                    <label class="block font-bold mb-2 text-red-600">권한 인증 (저장하려면 암호 입력)</label>
-                    <input type="password" id="post-pw" placeholder="암호 (1019393838)" class="w-full px-4 py-3 border border-gray-300 rounded bg-white font-bold tracking-widest mb-4">
-                    
-                    <div class="flex justify-end gap-3">
-                        <button onclick="showHome()" class="px-6 py-3 bg-gray-300 text-gray-800 rounded font-bold">취소</button>
-                        <button id="save-btn" onclick="savePost()" class="px-8 py-3 bg-[#8B4513] text-white rounded font-bold shadow-md">기록 보존하기</button>
-                    </div>
-                </div>
+        <div id="write-section" style="display: none;" class="bg-white p-8 rounded-xl shadow-lg border border-[#E6DCC8]">
+            <h2 class="text-3xl font-serif font-bold mb-6 text-center">새 기록 작성</h2>
+            <input type="text" id="post-title" placeholder="제목" class="w-full px-4 py-3 border rounded mb-4">
+            <select id="post-category" class="w-full px-4 py-3 border rounded mb-4">
+                <option value="고대사">고대사</option><option value="중세사">중세사</option>
+                <option value="근대사">근대사</option><option value="현대사" selected>현대사</option>
+            </select>
+            <div id="editor-container" class="mb-4"></div>
+            <div class="flex justify-end gap-3">
+                <button onclick="showHome()" class="px-6 py-3 bg-gray-200 rounded font-bold">취소</button>
+                <button onclick="openModal('save')" class="px-8 py-3 bg-[#8B4513] text-white rounded font-bold">기록 보존하기</button>
             </div>
         </div>
-
     </main>
 
+    <!-- 암호 팝업 -->
+    <div id="password-modal" class="fixed inset-0 modal-bg z-50 flex items-center justify-center hidden">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-80 text-center">
+            <h3 class="font-bold mb-4">관리자 인증</h3>
+            <input type="password" id="modal-pw" class="w-full p-3 border rounded mb-4 text-center tracking-widest text-lg">
+            <div class="flex gap-2">
+                <button onclick="closeModal()" class="flex-1 p-3 bg-gray-200 rounded">취소</button>
+                <button onclick="verifyPassword()" class="flex-1 p-3 bg-[#8B4513] text-white rounded">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
     <script>
-        // 오늘 날짜 기본 세팅
-        document.getElementById('post-date').valueAsDate = new Date();
+        var quill = new Quill('#editor-container', { theme: 'snow' });
+        var db = firebase.initializeApp({apiKey:"AIzaSyDLfbCS-MJXNNtrFjtmn_giVckuq9YTEno", projectId:"mori-history"}).firestore();
+        var currentAction = '', targetId = '';
 
-        // 파이어베이스 셋업 (100% 정상 작동하는 사용자님 고유 정보)
-        var db = null;
-        try {
-            firebase.initializeApp({
-                apiKey: "AIzaSyDLfbCS-MJXNNtrFjtmn_giVckuq9YTEno",
-                authDomain: "mori-history.firebaseapp.com",
-                projectId: "mori-history"
+        db.collection('mori_posts').onSnapshot(function(snap) {
+            var html = '';
+            var posts = [];
+            snap.forEach(function(d) { posts.push(d.data()); });
+            posts.sort((a,b) => b.time - a.time).forEach(function(d) {
+                html += `<article class="bg-white p-6 rounded shadow border relative">
+                    <button onclick="confirmDelete('${d.id}')" class="absolute top-4 right-4 text-red-500 font-bold">삭제</button>
+                    <span class="text-xs bg-gray-800 text-white px-2 py-1">${d.category}</span>
+                    <h3 class="text-2xl font-bold mt-2">${d.title}</h3>
+                    <div class="mt-4">${d.content}</div>
+                </article>`;
             });
-            db = firebase.firestore();
+            document.getElementById('posts-container').innerHTML = html || '기록 없음';
+        });
 
-            // 실시간 글 목록 불러오기
-            db.collection('mori_posts').onSnapshot(function(snapshot) {
-                var container = document.getElementById('posts-container');
-                container.innerHTML = '';
-                var postsArray = [];
-                
-                snapshot.forEach(function(doc) { postsArray.push(doc.data()); });
-                
-                // 최신순 정렬
-                postsArray.sort(function(a, b) { return b.time - a.time; });
+        function showHome() { document.getElementById('home-section').style.display = 'block'; document.getElementById('write-section').style.display = 'none'; }
+        function showWrite() { document.getElementById('home-section').style.display = 'none'; document.getElementById('write-section').style.display = 'block'; }
+        
+        function openModal(action, id) { currentAction = action; targetId = id; document.getElementById('password-modal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('password-modal').classList.add('hidden'); }
+        function confirmDelete(id) { openModal('delete', id); }
 
-                if (postsArray.length === 0) {
-                    container.innerHTML = '<p class="text-center text-gray-500 py-10 font-bold">아직 작성된 기록이 없습니다.</p>';
-                } else {
-                    postsArray.forEach(function(data) {
-                        // 줄바꿈이 그대로 유지되도록 처리 (텍스트 에디터를 빼버렸기 때문)
-                        var safeContent = data.content.replace(/\n/g, "<br>");
-                        
-                        container.innerHTML += `
-                            <article class="bg-white p-6 md:p-8 rounded-xl shadow border border-[#E6DCC8] mb-6">
-                                <div class="flex items-center gap-3 mb-3">
-                                    <span class="bg-[#242b2e] text-white text-xs px-3 py-1 rounded font-bold">${data.category}</span>
-                                    <span class="text-sm font-bold text-[#8B4513]">${data.date}</span>
-                                </div>
-                                <h3 class="text-2xl font-bold mb-4">${data.title}</h3>
-                                <div class="text-gray-800 text-lg leading-relaxed">${safeContent}</div>
-                            </article>
-                        `;
-                    });
-                }
-            }, function(error) {
-                alert("🚨 불러오기 실패: 파이어베이스 규칙을 확인하세요!");
-            });
-
-        } catch (e) {
-            alert("파이어베이스 초기화 에러!");
+        function verifyPassword() {
+            if (document.getElementById('modal-pw').value === '1019393838') {
+                closeModal();
+                if (currentAction === 'save') saveToDb();
+                else deleteFromDb(targetId);
+            } else { alert('비밀번호 오류'); }
         }
 
-        // 화면 전환 스위치 (절대 페이지 새로고침 안 됨)
-        function showHome() {
-            document.getElementById('home-section').style.display = 'block';
-            document.getElementById('write-section').style.display = 'none';
-        }
-
-        function showWrite() {
-            document.getElementById('home-section').style.display = 'none';
-            document.getElementById('write-section').style.display = 'block';
-        }
-
-        // 핵심 저장 로직
-        function savePost() {
-            if (!db) { alert("서버와 연결되지 않았습니다."); return; }
-
-            var btn = document.getElementById('save-btn');
-            var title = document.getElementById('post-title').value;
-            var date = document.getElementById('post-date').value;
-            var category = document.getElementById('post-category').value;
-            var content = document.getElementById('post-content').value;
-            var pw = document.getElementById('post-pw').value;
-
-            // 빈칸 검사
-            if (!title || !content) {
-                alert("❌ 제목과 내용을 모두 입력해주세요!");
-                return;
-            }
-            
-            // 비밀번호 검사
-            if (pw !== "1019393838") {
-                alert("❌ 암호가 틀렸습니다!");
-                return;
-            }
-
-            // 중복 클릭 방지
-            btn.innerText = "저장 중...";
-            btn.disabled = true;
-
+        function saveToDb() {
             var id = Date.now().toString();
-
-            // 파이어베이스에 진짜로 밀어넣기
             db.collection('mori_posts').doc(id).set({
-                id: id,
-                title: title,
-                date: date,
-                category: category,
-                content: content,
-                time: Date.now()
-            })
-            .then(function() {
-                alert("🎉 게시글이 성공적으로 등록되었습니다!");
-                
-                // 입력칸 다 비우기
-                document.getElementById('post-title').value = '';
-                document.getElementById('post-content').value = '';
-                document.getElementById('post-pw').value = '';
-                
-                // 버튼 복구 및 메인 화면으로 이동
-                btn.innerText = "기록 보존하기";
-                btn.disabled = false;
-                showHome();
-                window.scrollTo(0, 0);
-            })
-            .catch(function(error) {
-                alert("❌ 에러 발생: " + error.message);
-                btn.innerText = "기록 보존하기";
-                btn.disabled = false;
-            });
+                id: id, title: document.getElementById('post-title').value,
+                category: document.getElementById('post-category').value,
+                content: quill.root.innerHTML, time: Date.now()
+            }).then(() => { alert('저장됨'); showHome(); });
+        }
+
+        function deleteFromDb(id) {
+            db.collection('mori_posts').doc(id).delete().then(() => alert('삭제됨'));
         }
     </script>
 </body>
 </html>
-
 
 ```
